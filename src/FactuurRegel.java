@@ -8,11 +8,9 @@ public class FactuurRegel {
 
     private Product product;
     private int aantalProducten;
-    private double kortingspercentage;
 
     public FactuurRegel (Product product) {
         this.product = product;
-        this.kortingspercentage = 0.0;
         this.aantalProducten = 1;
     }
 
@@ -82,6 +80,7 @@ public class FactuurRegel {
     public String toString () {
 
         double prijsMetKorting;
+        double kortingspercentage;
 
         /*
          * De initiële prijs met korting (bij initialisatie nog zonder korting)
@@ -144,6 +143,8 @@ public class FactuurRegel {
     public double getTotaalprijs () {
 
         double prijsMetKorting;
+        double kortingspercentage = 0.0;
+
 
         /*
          * De initiële prijs met korting (bij initialisatie nog zonder korting)
