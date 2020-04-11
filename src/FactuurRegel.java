@@ -16,6 +16,14 @@ public class FactuurRegel {
         this.aantalProducten = 1;
     }
 
+    public Product getProduct () {
+        return product;
+    }
+
+    public int getAantalProducten () {
+        return aantalProducten;
+    }
+
     /*
      * Met deze methode kan een aantal variabelen worden ingesteld:
      *
@@ -57,48 +65,12 @@ public class FactuurRegel {
     }
 
     /*
-     * Als een product minder dan 10 dagen over datum is, wordt een korting gegeven van 50%.
-     * Vanaf 10 dagen over datum wordt een product gratis weg gegeven.
-     */
-    protected double bepaalKortingVanwegeHoudbaarheidsdatum () {
-
-        Date vandaag = new Date ();
-        Date houdbaarheidsdatum = product.getHoudbaarheidsdatum();
-        int verschilInDagen = DatumUtil.getAantalDagenTussenData(vandaag, houdbaarheidsdatum);
-
-        if (vandaag.before (houdbaarheidsdatum)) {
-            return 0.0;
-        }
-        else if (verschilInDagen < 10) {
-            return 50.0;
-        }
-        else {
-            return 100.0;
-        }
-    }
-
-    /*
-     * Om 'long method' aan te pakken, is 'replace temp with query' gebruikt. De tijdelijke
-     * variabele totaalAantalProducten is verwijderd uit toString en hier als
-     * query/methode toegevoegd.
-     *
-     * Om de korting op basis van verkochte aantallen van een product te kunnen bepalen
-     * moet het totaal aantal producten worden bepaald. Als in een doos bijv. 6 flessen
-     * zitten, is het totaal aantal verkochte producten bij 11 dozen 66.
-     */
-    private int getTotaalAantalProducten () {
-        return aantalProducten * product.getAantalProductenInVerpakking();
-    }
-
-    /*
      * De string waarmee een factuurregel op het scherm getoond kan worden,
      * kan met behulp van de methode toString worden opgevraagd.
      */
     public String toString () {
 
         double prijsMetKorting;
-        double kortingVanwegeAantalProducten = 0.0;
-        double kortingVanwegeHoudbaarheidsdatum;
 
         /*
          * De initiële prijs met korting (bij initialisatie nog zonder korting)
@@ -117,39 +89,9 @@ public class FactuurRegel {
             prijsMetKorting = product.getEenheidsPrijs() * aantalProducten;
         }
 
-        /*
-         * Vanaf 100 stuks van een product geldt een korting van 2%.
-         * Vanaf 1.000 stuks geldt een korting van 3%.
-         *
-         * Deze korting is ook van toepassing als het aantal producten
-         * vermenigvuldigd met het aantal producten per verpakking hoger is
-         * dan die aantallen. Bij 1 verpakking met 250 stuks wordt met andere
-         * woorden ook een korting van 2% gegeven.
-         */
-        if (getTotaalAantalProducten () >= 1000) {
-            kortingVanwegeAantalProducten = 3.0;
-            prijsMetKorting *= (100.0 - kortingVanwegeAantalProducten) / 100.0;
-        }
-        else if (getTotaalAantalProducten () >= 100) {
-            kortingVanwegeAantalProducten = 2.0;
-            prijsMetKorting *= (100.0 - kortingVanwegeAantalProducten) / 100.0;
-        }
-
-        /*
-         * Vervolgens wordt op basis van een houdbaarheidsdatum ook nog een korting
-         * gegeven (die bovenop de korting komt die hierboven op basis van de
-         * aantallen verkochte producten is bepaald). De klant ontvangt 50% korting
-         * over een product waarvan de houdbaarheidsdatum minder dan 10 dagen is
-         * verlopen. Als de houdbaarheidsdatum meer dan 10 dagen is verlopen,
-         * wordt 100% korting gegeven (dan is het product gratis).
-         */
-        kortingVanwegeHoudbaarheidsdatum = bepaalKortingVanwegeHoudbaarheidsdatum ();
-
-        /*
-         * Het totale kortingspercentage en de prijs met korting worden bijgewerkt.
-         */
-        kortingspercentage = 100.0 - (100.0 - kortingVanwegeAantalProducten) / 100.0 * (100.0 - kortingVanwegeHoudbaarheidsdatum);
-        prijsMetKorting *= (100.0 - kortingVanwegeHoudbaarheidsdatum) / 100.0;
+        Korting korting = new Korting (this);
+        kortingspercentage = korting.bepaalKortingsPercentageOpBasisvanProduct();
+        prijsMetKorting *= (100.0 - kortingspercentage) / 100.0;
 
         /*
          * Als gewicht van het product onbekend is en als het aantal producten
@@ -159,9 +101,10 @@ public class FactuurRegel {
         if ((aantalProducten == 0) && (product.getGewicht() <= 0.0)) {
             return "";
         }
-        else if (kortingVanwegeHoudbaarheidsdatum == 100.0) {
+        else if (kortingspercentage == 100.0) {
             return "";
         }
+
         /*
          * Een factuurregel voor verschillende combinaties wordt als volgt
          * opgebouwd:
@@ -190,8 +133,6 @@ public class FactuurRegel {
     public double getTotaalprijs () {
 
         double prijsMetKorting;
-        double kortingVanwegeAantalProducten = 0.0;
-        double kortingVanwegeHoudbaarheidsdatum;
 
         /*
          * De initiële prijs met korting (bij initialisatie nog zonder korting)
@@ -210,42 +151,7 @@ public class FactuurRegel {
             prijsMetKorting = product.getEenheidsPrijs() * aantalProducten;
         }
 
-        /*
-         * Vanaf 100 stuks van een product geldt een korting van 2%.
-         * Vanaf 1.000 stuks geldt een korting van 3%.
-         *
-         * Deze korting is ook van toepassing als het aantal producten
-         * vermenigvuldigd met het aantal producten per verpakking hoger is
-         * dan die aantallen. Bij 1 verpakking met 250 stuks wordt met andere
-         * woorden ook een korting van 2% gegeven.
-         */
-        int totaalAantalProducten = aantalProducten * product.getAantalProductenInVerpakking();
-
-        if (totaalAantalProducten >= 1000) {
-            kortingVanwegeAantalProducten = 3.0;
-            prijsMetKorting *= (100.0 - kortingVanwegeAantalProducten) / 100.0;
-        }
-        else if (totaalAantalProducten >= 100) {
-            kortingVanwegeAantalProducten = 2.0;
-            prijsMetKorting *= (100.0 - kortingVanwegeAantalProducten) / 100.0;
-        }
-
-        /*
-         * Vervolgens wordt op basis van een houdbaarheidsdatum ook nog een korting
-         * gegeven (die bovenop de korting komt die hierboven op basis van de
-         * aantallen verkochte producten is bepaald). De klant ontvangt 50% korting
-         * over een product waarvan de houdbaarheidsdatum minder dan 10 dagen is
-         * verlopen. Als de houdbaarheidsdatum meer dan 10 dagen is verlopen,
-         * wordt 100% korting gegeven (dan is het product gratis).
-         */
-        kortingVanwegeHoudbaarheidsdatum = bepaalKortingVanwegeHoudbaarheidsdatum ();
-
-        /*
-         * Het totale kortingspercentage en de prijs met korting worden bijgewerkt.
-         */
-        kortingspercentage = 100.0 - (100.0 - kortingVanwegeAantalProducten) / 100.0 * (100.0 - kortingVanwegeHoudbaarheidsdatum);
-        prijsMetKorting *= (100.0 - kortingVanwegeHoudbaarheidsdatum) / 100.0;
-
-        return prijsMetKorting;
+        Korting korting = new Korting (this);
+        return prijsMetKorting * (100.0 - korting.bepaalKortingsPercentageOpBasisvanProduct()) / 100.0;
     }
 }
