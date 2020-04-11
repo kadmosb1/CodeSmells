@@ -23,6 +23,6 @@
      5 factuurregels die in de class Main in een aparte methode voegFactuurRegelsToe
      worden opgenomen. Deze methode wordt in main in de Class Main aangeroepen.
 2. Replace Temp with Query wordt toegepast om code smell 'long method' op te lossen:
-    - In regel 119 in methode toString van class FactuurRegel kan tijdelijke variabele
-      totaalAantalProducten worden vervangen door een methode getTotaalAantalProducten
-      die dan in regels 121 en 125 kan worden aangeroepen.
+   - In regel 119 in methode toString van class FactuurRegel kan tijdelijke variabele
+     totaalAantalProducten worden vervangen door een methode getTotaalAantalProducten
+     die dan in regels 121 en 125 kan worden aangeroepen.
