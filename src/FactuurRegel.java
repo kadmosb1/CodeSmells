@@ -1,9 +1,4 @@
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 /*
  * Een factuur bestaat uit een aantal Factuurregels, waar op basis van een aantal
@@ -65,8 +60,10 @@ public class FactuurRegel {
      * Als een product minder dan 10 dagen over datum is, wordt een korting gegeven van 50%.
      * Vanaf 10 dagen over datum wordt een product gratis weg gegeven.
      */
-    protected double bepaalKortingVanwegeHoudbaarheidsdatum (Date vandaag, Date houdbaarheidsdatum) {
+    protected double bepaalKortingVanwegeHoudbaarheidsdatum () {
 
+        Date vandaag = new Date ();
+        Date houdbaarheidsdatum = product.getHoudbaarheidsdatum();
         int verschilInDagen = DatumUtil.getAantalDagenTussenData(vandaag, houdbaarheidsdatum);
 
         if (vandaag.before (houdbaarheidsdatum)) {
@@ -146,8 +143,7 @@ public class FactuurRegel {
          * verlopen. Als de houdbaarheidsdatum meer dan 10 dagen is verlopen,
          * wordt 100% korting gegeven (dan is het product gratis).
          */
-        Date vandaag = new Date ();
-        kortingVanwegeHoudbaarheidsdatum = bepaalKortingVanwegeHoudbaarheidsdatum (vandaag, product.getHoudbaarheidsdatum());
+        kortingVanwegeHoudbaarheidsdatum = bepaalKortingVanwegeHoudbaarheidsdatum ();
 
         /*
          * Het totale kortingspercentage en de prijs met korting worden bijgewerkt.
@@ -242,8 +238,7 @@ public class FactuurRegel {
          * verlopen. Als de houdbaarheidsdatum meer dan 10 dagen is verlopen,
          * wordt 100% korting gegeven (dan is het product gratis).
          */
-        Date vandaag = new Date ();
-        kortingVanwegeHoudbaarheidsdatum = bepaalKortingVanwegeHoudbaarheidsdatum (vandaag, product.getHoudbaarheidsdatum());
+        kortingVanwegeHoudbaarheidsdatum = bepaalKortingVanwegeHoudbaarheidsdatum ();
 
         /*
          * Het totale kortingspercentage en de prijs met korting worden bijgewerkt.
