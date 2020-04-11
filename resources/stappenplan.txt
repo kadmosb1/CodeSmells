@@ -26,3 +26,11 @@
    - In regel 119 in methode toString van class FactuurRegel kan tijdelijke variabele
      totaalAantalProducten worden vervangen door een methode getTotaalAantalProducten
      die dan in regels 121 en 125 kan worden aangeroepen.
+3. Preserve Whole Object wordt toegepast om code smell 'long method' op te lossen:
+   - Bij het bepalen vanwege de houdbaarheidsdatum in regel 150 van de class FactuurRegel
+     wordt eerste een tijdelijke variabele vandaag aangemaakt (die pas in de genoemde
+     methode wordt gebruikt en wordt van product de houdbaarheidsdatum doorgegeven.
+     Aan de methode bepaalKortingVanwegeHoudbaarheidsdatum kun je beter geen parameters
+     meegeven, omdat product een private property is die vanuit deze methode gebruikt
+     kan worden om de houdbaarheidsdatum te bepalen.
+   - Dezelfde stap moet dan natuurlijk ook worden genomen in de methode getTotaalPrijs.

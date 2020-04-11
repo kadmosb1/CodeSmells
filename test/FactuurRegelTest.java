@@ -14,7 +14,7 @@ public class FactuurRegelTest {
         Product product = new Product ("Product", 0.88, houdbaarheidsdatum);
         FactuurRegel factuurRegel = new FactuurRegel(product);
         double expected = 50.0;
-        double actual = factuurRegel.bepaalKortingVanwegeHoudbaarheidsdatum(new Date(), product.getHoudbaarheidsdatum());
+        double actual = factuurRegel.bepaalKortingVanwegeHoudbaarheidsdatum();
         assertEquals(expected, actual, 0.1);
     }
 
@@ -24,7 +24,7 @@ public class FactuurRegelTest {
         Product product = new Product ("Product", 0.88, houdbaarheidsdatum);
         FactuurRegel factuurRegel = new FactuurRegel(product);
         double expected = 100.0;
-        double actual = factuurRegel.bepaalKortingVanwegeHoudbaarheidsdatum(new Date(), product.getHoudbaarheidsdatum());
+        double actual = factuurRegel.bepaalKortingVanwegeHoudbaarheidsdatum();
         assertEquals(expected, actual, 0.1);
     }
 
@@ -34,7 +34,7 @@ public class FactuurRegelTest {
         Product product = new Product ("Product", 0.88, houdbaarheidsdatum);
         FactuurRegel factuurRegel = new FactuurRegel(product);
         double expected = 0.0;
-        double actual = factuurRegel.bepaalKortingVanwegeHoudbaarheidsdatum(new Date(), product.getHoudbaarheidsdatum());
+        double actual = factuurRegel.bepaalKortingVanwegeHoudbaarheidsdatum();
         assertEquals(expected, actual, 0.1);
     }
 }

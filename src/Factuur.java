@@ -1,4 +1,3 @@
-import java.text.ParseException;
 import java.util.ArrayList;
 
 
@@ -45,28 +44,7 @@ public class Factuur {
     /*
      * De gehele factuur wordt op het scherm getoond.
      */
-    /* Door toepassing van ExtractMethod wordt buitenNederland verplaatst
-     * naar Main.
-    public void maakFactuur (boolean buitenNederland) throws ParseException {
-     */
     public void maakFactuur () {
-
-        /*
-         * De factuur moet gemakkelijk voor zowel een Nederlandse als een Belgische klant opgesteld kunnen
-         * worden. Dat gebeurt op basis van de eerste twee letters van het BTW-nummer.
-         */
-        /* Toepassing van extracmethod
-        String btwNummer;
-
-        if (buitenNederland) {
-            btwNummer = "BE 0826882419";
-        }
-        else {
-            btwNummer = "NL 0826882419";
-        }
-
-        klant = new Klant ("De Haagse Hogeschool", "Johanna Westerdijkplein", 75, "", 2521, "EN", "DEN HAAG", btwNummer, Klant.OVERHEID);
-        */
 
         /*
          * Het totaalbedrag dat een klant moet betalen wordt op 0.0 geïnitialiseerd,
