@@ -54,3 +54,7 @@
      de variabele kortingspercentage die is bepaald in het method object Korting.
    - Deze stap wordt nog een keer doorlopen in de method getTotaalPrijs van Class FactuurRegel.
      Bovenstaande stappen moeten daar ook worden doorlopen.
+4. Decompose Conditional wordt toegepast om code smell 'long method' op te lossen:
+   - In regel 101 wordt een gecombineerde voorwaarde gebruikt die door een methode-aanroep
+     vervangen kan worden. Daarvoor wordt de methode 'productIsGeleverd' van het type
+     boolean gebruikt.
