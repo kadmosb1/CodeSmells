@@ -10,7 +10,6 @@ public class FactuurRegelTest {
 
     @Test
     public void testKortingBijHoudbaarheidsdatum() throws ParseException {
-        /*
         Date vandaag = new Date ();
         FactuurRegel fr = new FactuurRegel("Product 1", 10.0, "08-04-2020");
         Date houdbaarheidsdatum = DatumUtil.sdf.parse ("08-04-2020");
@@ -25,6 +24,5 @@ public class FactuurRegelTest {
         verschilInMillisecondes = Math.abs(vandaag.getTime() - houdbaarheidsdatum.getTime());
         verschilInDagen = TimeUnit.DAYS.convert(verschilInMillisecondes, TimeUnit.MILLISECONDS);
         assertEquals(0.0, fr.bepaalKortingVanwegeHoudbaarheidsdatum (vandaag, verschilInDagen, houdbaarheidsdatum), 0.1);
-        */
     }
 }

@@ -15,10 +15,10 @@ public class Product {
     private double gewicht;
     private String eenheid;
 
-    public Product (String naam, double prijsPerStukOfKilo, Date houdbaarheidsdatum) {
+    public Product (String naam, double prijsPerStukOfKilo, String houdbaarheidsdatum) {
         this.naam = naam;
         this.eenheidsprijs = prijsPerStukOfKilo;
-        this.houdbaarheidsdatum = houdbaarheidsdatum;
+        this.houdbaarheidsdatum = DatumUtil.getDatum (houdbaarheidsdatum);
         this.aantalProductenInVerpakking = 1;
         this.gewicht = 0.0;
     }
