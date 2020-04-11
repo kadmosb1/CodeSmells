@@ -15,10 +15,10 @@ public class FactuurRegel {
     private int aantalProducten;
     private double kortingspercentage;
 
-    public FactuurRegel (String productnaam, double prijsPerStukOfKilo, String datum) throws ParseException {
-        product = new Product (productnaam, prijsPerStukOfKilo, DatumUtil.sdf.parse(datum));
-        kortingspercentage = 0.0;
-        aantalProducten = 1;
+    public FactuurRegel (Product product) {
+        this.product = product;
+        this.kortingspercentage = 0.0;
+        this.aantalProducten = 1;
     }
 
     /*
@@ -65,7 +65,10 @@ public class FactuurRegel {
      * Als een product minder dan 10 dagen over datum is, wordt een korting gegeven van 50%.
      * Vanaf 10 dagen over datum wordt een product gratis weg gegeven.
      */
-    protected double bepaalKortingVanwegeHoudbaarheidsdatum (Date vandaag, long verschilInDagen, Date houdbaarheidsdatum) {
+    protected double bepaalKortingVanwegeHoudbaarheidsdatum (Date vandaag, Date houdbaarheidsdatum) {
+
+        int verschilInDagen = DatumUtil.getAantalDagenTussenData(vandaag, houdbaarheidsdatum);
+
         if (vandaag.before (houdbaarheidsdatum)) {
             return 0.0;
         }
@@ -133,9 +136,7 @@ public class FactuurRegel {
          * wordt 100% korting gegeven (dan is het product gratis).
          */
         Date vandaag = new Date ();
-        long verschilInMillisecondes = Math.abs(vandaag.getTime() - product.getHoudbaarheidsdatum().getTime ());
-        long verschilInDagen = TimeUnit.DAYS.convert(verschilInMillisecondes, TimeUnit.MILLISECONDS);
-        kortingVanwegeHoudbaarheidsdatum = bepaalKortingVanwegeHoudbaarheidsdatum (vandaag, verschilInDagen, product.getHoudbaarheidsdatum());
+        kortingVanwegeHoudbaarheidsdatum = bepaalKortingVanwegeHoudbaarheidsdatum (vandaag, product.getHoudbaarheidsdatum());
 
         /*
          * Het totale kortingspercentage en de prijs met korting worden bijgewerkt.
@@ -231,9 +232,7 @@ public class FactuurRegel {
          * wordt 100% korting gegeven (dan is het product gratis).
          */
         Date vandaag = new Date ();
-        long verschilInMillisecondes = Math.abs(vandaag.getTime() - product.getHoudbaarheidsdatum().getTime ());
-        long verschilInDagen = TimeUnit.DAYS.convert(verschilInMillisecondes, TimeUnit.MILLISECONDS);
-        kortingVanwegeHoudbaarheidsdatum = bepaalKortingVanwegeHoudbaarheidsdatum (vandaag, verschilInDagen, product.getHoudbaarheidsdatum());
+        kortingVanwegeHoudbaarheidsdatum = bepaalKortingVanwegeHoudbaarheidsdatum (vandaag, product.getHoudbaarheidsdatum());
 
         /*
          * Het totale kortingspercentage en de prijs met korting worden bijgewerkt.
