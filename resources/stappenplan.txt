@@ -65,6 +65,3 @@
    - Voeg toString aan deze Classes toe die in het volgende punt gebruikt kunnen worden.
    - Voeg een method getKlantgegevensOpFactuur aan Class Klant toe om de voor een factuur relevante
      gegevens bovenaan de factuur te kunnen tonen.
-   - In method printKlant is nog een Preserve Whole Object te behalen. Alle parameters worden uit het
-     object klant gehaald dat een property is die ook in printKlant bekend is. Deze methode kan dus
-     zonder properties worden aangeroepen.

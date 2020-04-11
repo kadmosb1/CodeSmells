@@ -37,8 +37,8 @@ public class Factuur {
     /*
      * De factuur opent met de gegevens van een klant.
      */
-    private void printKlant () {
-        System.out.format("%s%n%n", klant.getKlantgegevensOpFactuur());
+    private void printKlant (String naam, FactuurAdres adres) {
+        System.out.format("%s%n%s%n%n", naam, adres);
     }
 
     /*
@@ -59,7 +59,7 @@ public class Factuur {
         /*
          * Bovenaan de factuur worden de gegevens van een klant getoond.
          */
-        printKlant();
+        printKlant(klant.getNaam(), klant.getAdres());
 
         /*
          * Na een paar witregels wordt eerst de titelregel getoond met daarin
