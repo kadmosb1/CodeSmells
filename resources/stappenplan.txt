@@ -22,5 +22,3 @@
      het testen van de class Factuur waren opgenomen. Het gaat om het toevoegen van
      5 factuurregels die in de class Main in een aparte methode voegFactuurRegelsToe
      worden opgenomen. Deze methode wordt in main in de Class Main aangeroepen.
-2. ReplaceTempWithQuery toegepast code smell 'long method' op te lossen:
-   -
