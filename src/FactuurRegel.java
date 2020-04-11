@@ -81,6 +81,19 @@ public class FactuurRegel {
     }
 
     /*
+     * Om 'long method' aan te pakken, is 'replace temp with query' gebruikt. De tijdelijke
+     * variabele totaalAantalProducten is verwijderd uit toString en hier als
+     * query/methode toegevoegd.
+     *
+     * Om de korting op basis van verkochte aantallen van een product te kunnen bepalen
+     * moet het totaal aantal producten worden bepaald. Als in een doos bijv. 6 flessen
+     * zitten, is het totaal aantal verkochte producten bij 11 dozen 66.
+     */
+    private int getTotaalAantalProducten () {
+        return aantalProducten * product.getAantalProductenInVerpakking();
+    }
+
+    /*
      * De string waarmee een factuurregel op het scherm getoond kan worden,
      * kan met behulp van de methode toString worden opgevraagd.
      */
@@ -116,13 +129,11 @@ public class FactuurRegel {
          * dan die aantallen. Bij 1 verpakking met 250 stuks wordt met andere
          * woorden ook een korting van 2% gegeven.
          */
-        int totaalAantalProducten = aantalProducten * product.getAantalProductenInVerpakking();
-
-        if (totaalAantalProducten >= 1000) {
+        if (getTotaalAantalProducten () >= 1000) {
             kortingVanwegeAantalProducten = 3.0;
             prijsMetKorting *= (100.0 - kortingVanwegeAantalProducten) / 100.0;
         }
-        else if (totaalAantalProducten >= 100) {
+        else if (getTotaalAantalProducten () >= 100) {
             kortingVanwegeAantalProducten = 2.0;
             prijsMetKorting *= (100.0 - kortingVanwegeAantalProducten) / 100.0;
         }
