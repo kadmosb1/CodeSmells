@@ -34,3 +34,23 @@
      meegeven, omdat product een private property is die vanuit deze methode gebruikt
      kan worden om de houdbaarheidsdatum te bepalen.
    - Dezelfde stap moet dan natuurlijk ook worden genomen in de methode getTotaalPrijs.
+4. Replace Method with Method Object wordt toegepast om code smell 'long method' op te lossen:
+   - Om de volgende stap mogelijk te maken moet een get-method voor product getProduct
+     worden toegevoegd in FactuurRegel.
+   - Om de volgende stap mogeljk te maken moet een get-method voor aantalProducten
+     getAantalProducten worden toegevoegd in FactuurRegel.
+   - Verplaats de hele procedure voor het bepalen van het kortingspercentage (vanaf regel
+     120 t/m 152) naar een method object Korting. Pas de aanpak Replace Method with
+     Method Object toe om dit te realiseren.
+   - Ook de tijdelijke variabelen kortingVanwegeAantalProducten en
+     kortingVanwegeHoudbaarheidsdatum in regels 100 en 101 kunnen naar het method object
+     Korting worden verplaatst.
+   - Uiteraard gaat de methode getTotaalAantalProducten (die we zojuist hebben aangemaakt)
+     mee naar het method object Korting.
+   - Uiteraard gaat de methode bepaalKortingVanwegeHoudbaarheidsdatum (die we zojuist hebben
+     aangepast) mee naar het method object Korting.
+   - Als na deze verplaatsing in de class FactuurRegel in de method toString wordt gecontroleerd
+     of het kortingspercentage vanwege houdbaarheid 100% is, kan dit worden vervangen door
+     de variabele kortingspercentage die is bepaald in het method object Korting.
+   - Deze stap wordt nog een keer doorlopen in de method getTotaalPrijs van Class FactuurRegel.
+     Bovenstaande stappen moeten daar ook worden doorlopen.
