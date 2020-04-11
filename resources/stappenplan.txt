@@ -1,0 +1,24 @@
+0. Shotgun surgery leggen we niet uit, omdat we zullen zien dat als we code
+   smells op willen lossen, we vaak op meer plekken de code aan moeten passen.
+   Het oplossen van de andere code smells lost veel van de problematiek van
+   shotgun surgery al vanzelf op.
+1. Extract Method toegepast code smell 'long method' op te lossen:
+   - Het aanmaken van een klant wordt verplaatst naar de constructor van Factuur.
+     Want: voor een factuur moet precies 1 klant worden opgegeven.
+     Dat betekent wel dat het aanmaken van de klant verplaatst wordt naar de class Main
+     en dat het bepalen van een BTW-nummer en het type Klant in de class Main wordt
+     ondergebracht in de methode getKlant (met de parameters buitenNederland en
+     typeKlant). Uiteraard moet dan de parameter buitenNederland worden verwijderd uit
+     de methode maakFactuur in de class Factuur.
+   - Er kunnen met de huidige code maar een beperkt aantal factuurregels worden
+     aangemaakt. Dat is geen code smell, maar het beperkt ons natuurlijk wel
+     in het aantal regels dat we in een factuur toe kunnen voegen. Daar maken we
+     een ArrayList van.
+   - Om de volgende stap goed te kunnen doen, wordt een methode addFactuurRegel toegevoegd
+     in de class Factuur. Die is nodig omdat de verplaatsing hieronder code overzet
+     van de class Factuur naar de class Main en zonder addFactuurRegel kan dan
+     geen FactuurRegel aan de factuur worden toegevoegd.
+   - In de methode maakFactuur zijn een aantal regels opgenomen die daar alleen voor
+     het testen van de class Factuur waren opgenomen. Het gaat om het toevoegen van
+     5 factuurregels die in de class Main in een aparte methode voegFactuurRegelsToe
+     worden opgenomen. Deze methode wordt in main in de Class Main aangeroepen.
