@@ -71,7 +71,7 @@ public class FactuurRegel {
      * Voordat een factuurregel op het scherm wordt getoond wordt nog gecontroleerd of er eigenlijk
      * wel een product wordt geleverd.
      */
-    private boolean productIsGeleverd () {
+    private boolean productIsNietGeleverd () {
         return (aantalProducten == 0) && (product.getGewicht() <= 0.0);
     }
 
@@ -109,7 +109,7 @@ public class FactuurRegel {
          * in deze factuurregel 0 is, dan wordt een lege regel terug gegeven.
          * Dat gebeurt ook als de korting vanwege de houdbaarheidsdatum 100% is.
          */
-        if (!productIsGeleverd()) {
+        if (productIsNietGeleverd()) {
             return "";
         }
         else if (kortingspercentage == 100.0) {
