@@ -65,6 +65,17 @@ public class FactuurRegel {
     }
 
     /*
+     * Deze methode is het resultaat van de aanpak 'Decompose Conditional' om de code smell 'long method'
+     * te bestrijden.
+     * 
+     * Voordat een factuurregel op het scherm wordt getoond wordt nog gecontroleerd of er eigenlijk
+     * wel een product wordt geleverd.
+     */
+    private boolean productIsGeleverd () {
+        return (aantalProducten == 0) && (product.getGewicht() <= 0.0);
+    }
+
+    /*
      * De string waarmee een factuurregel op het scherm getoond kan worden,
      * kan met behulp van de methode toString worden opgevraagd.
      */
@@ -98,7 +109,7 @@ public class FactuurRegel {
          * in deze factuurregel 0 is, dan wordt een lege regel terug gegeven.
          * Dat gebeurt ook als de korting vanwege de houdbaarheidsdatum 100% is.
          */
-        if ((aantalProducten == 0) && (product.getGewicht() <= 0.0)) {
+        if (!productIsGeleverd()) {
             return "";
         }
         else if (kortingspercentage == 100.0) {
