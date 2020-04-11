@@ -56,7 +56,7 @@
      Bovenstaande stappen moeten daar ook worden doorlopen.
 5. Decompose Conditional wordt toegepast om code smell 'long method' op te lossen:
    - In regel 101 wordt een gecombineerde voorwaarde gebruikt die door een methode-aanroep
-     vervangen kan worden. Daarvoor wordt de methode 'productIsGeleverd' van het type
+     vervangen kan worden. Daarvoor wordt de methode 'productIsNietGeleverd' van het type
      boolean gebruikt.
 6. Extract Class wordt toegepast om code smell 'larg class' op te lossen:
    - Voor Klant worden alle gegevens voor een adres in een aparte class FactuurAdres opgenomen.
