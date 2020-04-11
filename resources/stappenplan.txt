@@ -68,3 +68,9 @@
    - In method printKlant is nog een Preserve Whole Object te behalen. Alle parameters worden uit het
      object klant gehaald dat een property is die ook in printKlant bekend is. Deze methode kan dus
      zonder properties worden aangeroepen.
+7. Remove Temporary Field
+   - De property kortingsPercentage in Class FactuurRegel is een tijdelijk veld dat als property
+     is toegevoegd, omdat het op twee plekken wordt gebruikt. De property wordt als lokale
+     variabele opgenomen in de methodes toString en getTotaalPrijs en daar geïnitialiseerd met de
+     waarde 0.0.
+   - In de constructor voor FactuurRegel hoeft kortingspercentage dan niet meer te worden geïnitialiseerd.

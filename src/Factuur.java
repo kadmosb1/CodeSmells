@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 
-
 /*
  * Een factuur voor een klant bestaat uit een aantal regels met de onderdelen:
  * - Aantal of gewicht
