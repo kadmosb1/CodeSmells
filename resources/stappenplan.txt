@@ -58,3 +58,13 @@
    - In regel 101 wordt een gecombineerde voorwaarde gebruikt die door een methode-aanroep
      vervangen kan worden. Daarvoor wordt de methode 'productIsNietGeleverd' van het type
      boolean gebruikt.
+6. Extract Class wordt toegepast om code smell 'larg class' op te lossen:
+   - Voor Klant worden alle gegevens voor een adres in een aparte class FactuurAdres opgenomen.
+   - Voor FactuurAdres worden de cijfers en letters voor een postcode opgenomen in Class Postcode.
+   - Voor FactuurAdres worden straat, nummer en toevoeging opgenomen in Class Adres.
+   - Voeg toString aan deze Classes toe die in het volgende punt gebruikt kunnen worden.
+   - Voeg een method getKlantgegevensOpFactuur aan Class Klant toe om de voor een factuur relevante
+     gegevens bovenaan de factuur te kunnen tonen.
+   - In method printKlant is nog een Preserve Whole Object te behalen. Alle parameters worden uit het
+     object klant gehaald dat een property is die ook in printKlant bekend is. Deze methode kan dus
+     zonder properties worden aangeroepen.

@@ -18,7 +18,11 @@ public class Main {
             btwNummer = "NL 0826882419";
         }
 
-        return new Klant("De Haagse Hogeschool", "Johanna Westerdijkplein", 75, "", 2521, "EN", "DEN HAAG", btwNummer, typeKlant);
+        Adres adres = new Adres ("Johanna Westerdijkplein", 75, "");
+        Postcode pc = new Postcode (2521, "EN");
+        FactuurAdres factuurAdres = new FactuurAdres (adres, pc, "DEN HAAG");
+
+        return new Klant("De Haagse Hogeschool", factuurAdres, btwNummer, typeKlant);
     }
 
     /*
