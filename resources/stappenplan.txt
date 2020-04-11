@@ -56,5 +56,5 @@
      Bovenstaande stappen moeten daar ook worden doorlopen.
 4. Decompose Conditional wordt toegepast om code smell 'long method' op te lossen:
    - In regel 101 wordt een gecombineerde voorwaarde gebruikt die door een methode-aanroep
-     vervangen kan worden. Daarvoor wordt de methode 'productIsGeleverd' van het type
+     vervangen kan worden. Daarvoor wordt de methode 'productIsNietGeleverd' van het type
      boolean gebruikt.
