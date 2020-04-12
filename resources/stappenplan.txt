@@ -75,3 +75,17 @@
    - printKlant in de Class Factuur kan zonder parameters worden aangeroepen, omdat van de methode
      getKlantgegevensOpFactuur van Class Klant gebruik gemaakt kan worden en omdat klant een property is
      die ook beschikbaar is in de methode printKlant.
+9. Remove Duplicate Code door gebruik te maken van een bestaande methode met dezelfde code.
+   - toString in Class FactuurRegel heeft voor een deel dezelfde code als getTotaalPrijs in dezelfde Class.
+     Hoe kunnen we die met elkaar combineren? We kunnen niet zomaar de code in toString vervangen door
+     een aanroep van getTotaalPrijs, omdat het kortingsPercentage dat we in toString bepalen niet wordt
+     teruggegeven als we getTotaalPrijs aanroepen. Hoe lossen we dat op?
+   - We brengen het gedeelte van beide functies voor het bepalen van de korting (regels 85 t/m 103 en
+     149 t/m 167) onder in de private methods getPrijsZonderKorting en getKortingspercentage en roepen
+     deze methods op de plek van de verplaatste regels aan.
+   - Het is schijn dat we kortingspercentage nodig hebben. In regel 12 controleren we of het kortings-
+     percentage 100% is. Maar we kunnen dat natuurlijk vervangen door te controleren of de totaalprijs
+     gelijk is aan 0.0 (100% korting betekent dat het product gratis is). Om zeker te weten dat afrondings-
+     verschillen daarin worden meegenomen gebruiken we 'if (Math.abs(prijsMetKorting - 0.0) < 0.01)'.
+   - Nu kunnen we getTotaalPrijs wel hergebruiken in toString en de code in de regels 91 t/m 112 vervangen
+     door de aanroep van getTotaalPrijs.

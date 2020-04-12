@@ -70,7 +70,7 @@ public class Main {
          * gebruikt om de code voor het aanmaken van een klant te verplaatsen
          * naar de constructor van
          */
-        Klant klant = getKlant(true, Klant.OVERHEID);
+        Klant klant = getKlant(false, Klant.HORECA);
         Factuur factuur = new Factuur (klant);
 
         /*

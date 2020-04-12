@@ -96,7 +96,8 @@ public class Factuur {
          * worden.
          */
         if (!klant.btwMoetWordenVerlegd()) {
-            System.out.format ("       %-39s   %8s  %7s  %9.2f%n", "", "", "21% BTW", 0.21 * totaalprijs);
+            System.out.format ("       %-39s   %17s  €%8.2f%n", "", "Subtotaal", totaalprijs);
+            System.out.format ("       %-39s   %8s  %7s  €%8.2f%n", "", "", "21% BTW", 0.21 * totaalprijs);
             System.out.format ("       %-39s   %8s  %7s  %9s%n", "", "", "", "_________ +");
         }
 

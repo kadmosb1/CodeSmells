@@ -63,6 +63,41 @@ public class FactuurRegel {
     }
 
     /*
+     * Deze methode is het resultaat van het verwijderen van de code smell 'duplicate code' in de
+     * methods toString en getTotaalprijs (de gemeenschappelijke code is verplaatst naar deze
+     * method en naar de method getKortingspercentage hieronder.
+     */
+    public double getPrijsZonderKorting () {
+
+        /*
+         * De initiële prijs met korting (bij initialisatie nog zonder korting)
+         * wordt als volgt bepaald:
+         *
+         * - Als een gewicht bekend is, wordt de totaalprijs bepaald op basis
+         *   van de eenheidprijs * het gewicht (1,5 kg * € 10/kg = € 15).
+         * - Als geen gewicht bekend is, wordt uitgegaan van een stuksprijs en
+         *   wordt die eenheidsprijs vermenigvuldigd met het aantal producten
+         *   dat in deze factuurregel afgerekend moet worden.
+         */
+        if (product.getGewicht() > 0.0) {
+            return product.getTotaalPrijs();
+        }
+        else {
+            return product.getEenheidsPrijs() * aantalProducten;
+        }
+    }
+
+    /*
+     * Deze methode is het resultaat van het verwijderen van de code smell 'duplicate code' in de
+     * methods toString en getTotaalprijs (de gemeenschappelijke code is verplaatst naar deze
+     * method en naar de method getKortingspercentage
+     */
+    public double getKortingspercentage () {
+        Korting korting = new Korting (this);
+        return korting.bepaalKortingsPercentageOpBasisvanProduct();
+    }
+
+    /*
      * Deze methode is het resultaat van de aanpak 'Decompose Conditional' om de code smell 'long method'
      * te bestrijden.
      * 
@@ -79,28 +114,11 @@ public class FactuurRegel {
      */
     public String toString () {
 
-        double prijsMetKorting;
-        double kortingspercentage;
-
         /*
-         * De initiële prijs met korting (bij initialisatie nog zonder korting)
-         * wordt als volgt bepaald:
-         *
-         * - Als een gewicht bekend is, wordt de totaalprijs bepaald op basis
-         *   van de eenheidprijs * het gewicht (1,5 kg * € 10/kg = € 15).
-         * - Als geen gewicht bekend is, wordt uitgegaan van een stuksprijs en
-         *   wordt die eenheidsprijs vermenigvuldigd met het aantal producten
-         *   dat in deze factuurregel afgerekend moet worden.
+         * Eerst wordt de prijs zonder korting bepaald.
          */
-        if (product.getGewicht() > 0.0) {
-            prijsMetKorting = product.getTotaalPrijs();
-        }
-        else {
-            prijsMetKorting = product.getEenheidsPrijs() * aantalProducten;
-        }
-
-        Korting korting = new Korting (this);
-        kortingspercentage = korting.bepaalKortingsPercentageOpBasisvanProduct();
+        double prijsMetKorting = getPrijsZonderKorting();
+        double kortingspercentage = getKortingspercentage();
         prijsMetKorting *= (100.0 - kortingspercentage) / 100.0;
 
         /*
@@ -141,29 +159,6 @@ public class FactuurRegel {
     }
 
     public double getTotaalprijs () {
-
-        double prijsMetKorting;
-        double kortingspercentage = 0.0;
-
-
-        /*
-         * De initiële prijs met korting (bij initialisatie nog zonder korting)
-         * wordt als volgt bepaald:
-         *
-         * - Als een gewicht bekend is, wordt de totaalprijs bepaald op basis
-         *   van de eenheidprijs * het gewicht (1,5 kg * € 10/kg = € 15).
-         * - Als geen gewicht bekend is, wordt uitgegaan van een stuksprijs en
-         *   wordt die eenheidsprijs vermenigvuldigd met het aantal producten
-         *   dat in deze factuurregel afgerekend moet worden.
-         */
-        if (product.getGewicht() > 0.0) {
-            prijsMetKorting = product.getTotaalPrijs();
-        }
-        else {
-            prijsMetKorting = product.getEenheidsPrijs() * aantalProducten;
-        }
-
-        Korting korting = new Korting (this);
-        return prijsMetKorting * (100.0 - korting.bepaalKortingsPercentageOpBasisvanProduct()) / 100.0;
+        return getPrijsZonderKorting() * (100.0 - getKortingspercentage ()) / 100.0;
     }
 }
