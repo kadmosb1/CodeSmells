@@ -106,17 +106,13 @@ public class Factuur {
         }
 
         /*
+         * Door toepassing van Replace Conditional with Polymorphism is een switch-statement (hier
+         * in de vorm van een if-then-else) verwijderd.
+         *
          * Als een klant onderdeel is van de overheid, dan ontvangt de klant
          * over zijn gehele rekening een korting van 2%.
          */
-        double kortingspercentageVanwegeTypeKlant = 0.0;
-
-        if (klant.getTypeKlant() == Klant.OVERHEID) {
-            kortingspercentageVanwegeTypeKlant = 2.0;
-        }
-        else if (klant.getTypeKlant() == Klant.HORECA) {
-            kortingspercentageVanwegeTypeKlant = 4.0;
-        }
+        double kortingspercentageVanwegeTypeKlant = klant.getKortingspercentage();
 
         /*
          * Als de klant geen korting krijgt, volgt hierna de laatste regel van

@@ -8,7 +8,7 @@ public class FactuurTest {
      * Er wordt een nieuwe klant aangemaakt, die aan Factuur meegegeven kan
      * worden.
      */
-    private Klant getKlant (boolean buitenNederland, int typeKlant) {
+    private Klant getKlant (boolean buitenNederland) {
 
         /*
          * De factuur moet gemakkelijk voor zowel een Nederlandse als een Belgische klant opgesteld kunnen
@@ -24,12 +24,14 @@ public class FactuurTest {
         Postcode pc = new Postcode (2521, "EN");
         FactuurAdres factuurAdres = new FactuurAdres (adres, pc, "DEN HAAG");
 
-        return new Klant("De Haagse Hogeschool", factuurAdres, btwNummer, typeKlant);
+        return new ConsumentKlant("De Haagse Hogeschool", factuurAdres, btwNummer);
+        // return new OverheidKlant("De Haagse Hogeschool", factuurAdres, btwNummer);
+        // return new HorecaKlant("De Haagse Hogeschool", factuurAdres, btwNummer);
     }
 
     private Factuur seedTestSet () {
 
-        Factuur factuur = new Factuur (getKlant(true, Klant.OVERHEID));
+        Factuur factuur = new Factuur (getKlant(true));
 
         /*
          * Voor elke regel worden nu producten aangemaakt, waarvoor de gegevens voor

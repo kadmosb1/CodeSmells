@@ -6,7 +6,7 @@ public class Main {
      * Er wordt een nieuwe klant aangemaakt, die aan Factuur meegegeven kan
      * worden.
      */
-    protected static Klant getKlant (boolean buitenNederland, int typeKlant) {
+    protected static Klant getKlant (boolean buitenNederland) {
 
         /*
          * De factuur moet gemakkelijk voor zowel een Nederlandse als een Belgische klant opgesteld kunnen
@@ -22,7 +22,9 @@ public class Main {
         Postcode pc = new Postcode (2521, "EN");
         FactuurAdres factuurAdres = new FactuurAdres (adres, pc, "DEN HAAG");
 
-        return new Klant("De Haagse Hogeschool", factuurAdres, btwNummer, typeKlant);
+        // return new ConsumentKlant("Karel J. van der Lelij", factuurAdres, btwNummer);
+        return new OverheidKlant("De Haagse Hogeschool", factuurAdres, btwNummer);
+        // return new HorecaKlant("Kobus Kuch", factuurAdres, btwNummer);
     }
 
     /*
@@ -70,7 +72,7 @@ public class Main {
          * gebruikt om de code voor het aanmaken van een klant te verplaatsen
          * naar de constructor van
          */
-        Klant klant = getKlant(false, Klant.HORECA);
+        Klant klant = getKlant(false);
         Factuur factuur = new Factuur (klant);
 
         /*

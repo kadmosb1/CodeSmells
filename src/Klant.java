@@ -1,4 +1,4 @@
-public class Klant {
+public abstract class Klant {
 
     /*
      * Deze constanten worden gebruikt voor het type klant.
@@ -15,27 +15,26 @@ public class Klant {
     private String naam;
     private FactuurAdres adres;
     private String btwNummer;
-    private int typeKlant;
 
-    public Klant (String naam, FactuurAdres adres, String btwNummer, int typeKlant) {
+    public Klant (String naam, FactuurAdres adres, String btwNummer) {
         this.naam = naam;
         this.adres = adres;
         this.btwNummer = btwNummer;
-        this.typeKlant = typeKlant;
     }
 
     public String getNaam () {
         return naam;
     }
+
     public FactuurAdres getAdres () {
         return adres;
     }
+
     public String getBTWNummer () {
         return btwNummer;
     }
-    public int getTypeKlant () {
-        return typeKlant;
-    }
+
+    public abstract double getKortingspercentage ();
 
     /*
      * Als Een klant buiten Nederland 'woont', wordt geen BTW gerekend (die BTW wordt
