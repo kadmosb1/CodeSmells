@@ -94,16 +94,20 @@
       (omdat de regel niet in de factuur getoond mag worden). Deze duplicate code wordt vervangen door een
       methode-aanroep waarin gecontroleerd wordt of sprake is van een lege regel (isLegeRegel). Daarvoor
       moet aan isLegeRegel wel het berekende kortingspercentage worden meegegeven.
-11. Replace Conditional with Polymorphism wordt toegepast om code smell 'switch-statement' te bestrijden.
+11. Met deze stap los je twee code smells op:
+    a. Replace Type Code with Subclasses wordt toegepast om code smell 'primitive obsession' te bestrijden.
+    b. Replace Conditional with Polymorphism wordt toegepast om code smell 'switch-statement' te bestrijden.
     - in maakFactuur wordt een klantkorting over de gehele factuur afgeleid op basis van het type van de
-      klant (CONSUMENT: 0%, OVERHEID: 2%, HORECA: 4%).
+      klant (CONSUMENT: 0%, OVERHEID: 2%, HORECA: 4%) (dit is Primitive Obsession).
+    - De constantes CONSUMENT, OVERHEID en HORECA worden verwijderd uit de Class Klant.
     - Het bepalen van de korting kan worden uitbesteed aan subclasses van Klant voor klanten van het type
-      CONSUMENT, OVERHEID en HORECA: ConsumentKlant, OverheidKlant en HorecaKlant.
+      CONSUMENT, OVERHEID en HORECA: ConsumentKlant, OverheidKlant en HorecaKlant (hierin en in de vorige
+      stap volg je de aanpak van Replace Type Code with Subclasses).
     - De class Klant wordt abstract gemaakt, zodat een abstracte methode getKortingspercentage bij Klant
-      gemaakt kan worden die wordt geïmplementeerd in de subclasses.
+      gemaakt kan worden die wordt geïmplementeerd in de subclasses (hier en hieronder volg je de aanpak
+      van Replace Conditional with Polymorphism).
     - De property typeKlant wordt verwijderd (en ook uit de constructor van Klant wordt de parameter
       typeKlant verwijderd).
-    - De constantes CONSUMENT, OVERHEID en HORECA worden verwijderd uit de Class Klant.
     - Daar waar een nieuwe klant wordt aangemaakt en gebruikt, gebeurt dat nu niet meer op basis van
       de constantes, maar op basis van de nieuwe subclasses, waarvan getKortingspercentage in maakFactuur
       is verschoven naar de aanroep van getKortingsPercentage van de subclasses.
