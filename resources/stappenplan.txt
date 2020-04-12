@@ -1,91 +1,96 @@
-0. Shotgun surgery leggen we niet uit, omdat we zullen zien dat als we code
-   smells op willen lossen, we vaak op meer plekken de code aan moeten passen.
-   Het oplossen van de andere code smells lost veel van de problematiek van
-   shotgun surgery al vanzelf op.
-1. Extract Method wordt toegepast om code smell 'long method' op te lossen:
-   - Het aanmaken van een klant wordt verplaatst naar de constructor van Factuur.
-     Want: voor een factuur moet precies 1 klant worden opgegeven.
-     Dat betekent wel dat het aanmaken van de klant verplaatst wordt naar de class Main
-     en dat het bepalen van een BTW-nummer en het type Klant in de class Main wordt
-     ondergebracht in de methode getKlant (met de parameters buitenNederland en
-     typeKlant). Uiteraard moet dan de parameter buitenNederland worden verwijderd uit
-     de methode maakFactuur in de class Factuur.
-   - Er kunnen met de huidige code maar een beperkt aantal factuurregels worden
-     aangemaakt. Dat is geen code smell, maar het beperkt ons natuurlijk wel
-     in het aantal regels dat we in een factuur toe kunnen voegen. Daar maken we
-     een ArrayList van.
-   - Om de volgende stap goed te kunnen doen, wordt een methode addFactuurRegel toegevoegd
-     in de class Factuur. Die is nodig omdat de verplaatsing hieronder code overzet
-     van de class Factuur naar de class Main en zonder addFactuurRegel kan dan
-     geen FactuurRegel aan de factuur worden toegevoegd.
-   - In de methode maakFactuur zijn een aantal regels opgenomen die daar alleen voor
-     het testen van de class Factuur waren opgenomen. Het gaat om het toevoegen van
-     5 factuurregels die in de class Main in een aparte methode voegFactuurRegelsToe
-     worden opgenomen. Deze methode wordt in main in de Class Main aangeroepen.
-2. Replace Temp with Query wordt toegepast om code smell 'long method' op te lossen:
-   - In regel 119 in methode toString van class FactuurRegel kan tijdelijke variabele
-     totaalAantalProducten worden vervangen door een methode getTotaalAantalProducten
-     die dan in regels 121 en 125 kan worden aangeroepen.
-3. Preserve Whole Object wordt toegepast om code smell 'long method' op te lossen:
-   - Bij het bepalen vanwege de houdbaarheidsdatum in regel 150 van de class FactuurRegel
-     wordt eerste een tijdelijke variabele vandaag aangemaakt (die pas in de genoemde
-     methode wordt gebruikt en wordt van product de houdbaarheidsdatum doorgegeven.
-     Aan de methode bepaalKortingVanwegeHoudbaarheidsdatum kun je beter geen parameters
-     meegeven, omdat product een private property is die vanuit deze methode gebruikt
-     kan worden om de houdbaarheidsdatum te bepalen.
-   - Dezelfde stap moet dan natuurlijk ook worden genomen in de methode getTotaalPrijs.
-4. Replace Method with Method Object wordt toegepast om code smell 'long method' op te lossen:
-   - Om de volgende stap mogelijk te maken moet een get-method voor product getProduct
-     worden toegevoegd in FactuurRegel.
-   - Om de volgende stap mogeljk te maken moet een get-method voor aantalProducten
-     getAantalProducten worden toegevoegd in FactuurRegel.
-   - Verplaats de hele procedure voor het bepalen van het kortingspercentage (vanaf regel
-     120 t/m 152) naar een method object Korting. Pas de aanpak Replace Method with
-     Method Object toe om dit te realiseren.
-   - Ook de tijdelijke variabelen kortingVanwegeAantalProducten en
-     kortingVanwegeHoudbaarheidsdatum in regels 100 en 101 kunnen naar het method object
-     Korting worden verplaatst.
-   - Uiteraard gaat de methode getTotaalAantalProducten (die we zojuist hebben aangemaakt)
-     mee naar het method object Korting.
-   - Uiteraard gaat de methode bepaalKortingVanwegeHoudbaarheidsdatum (die we zojuist hebben
-     aangepast) mee naar het method object Korting.
-   - Als na deze verplaatsing in de class FactuurRegel in de method toString wordt gecontroleerd
-     of het kortingspercentage vanwege houdbaarheid 100% is, kan dit worden vervangen door
-     de variabele kortingspercentage die is bepaald in het method object Korting.
-   - Deze stap wordt nog een keer doorlopen in de method getTotaalPrijs van Class FactuurRegel.
-     Bovenstaande stappen moeten daar ook worden doorlopen.
-5. Decompose Conditional wordt toegepast om code smell 'long method' op te lossen:
-   - In regel 101 wordt een gecombineerde voorwaarde gebruikt die door een methode-aanroep
-     vervangen kan worden. Daarvoor wordt de methode 'productIsNietGeleverd' van het type
-     boolean gebruikt.
-6. Extract Class wordt toegepast om code smell 'larg class' op te lossen:
-   - Voor Klant worden alle gegevens voor een adres in een aparte class FactuurAdres opgenomen.
-   - Voor FactuurAdres worden de cijfers en letters voor een postcode opgenomen in Class Postcode.
-   - Voor FactuurAdres worden straat, nummer en toevoeging opgenomen in Class Adres.
-   - Voeg toString aan deze Classes toe die in het volgende punt gebruikt kunnen worden.
-   - Voeg een method getKlantgegevensOpFactuur aan Class Klant toe om de voor een factuur relevante
-     gegevens bovenaan de factuur te kunnen tonen.
-7. Remove Temporary Field
-   - De property kortingsPercentage in Class FactuurRegel is een tijdelijk veld dat als property
-     is toegevoegd, omdat het op twee plekken wordt gebruikt. De property wordt als lokale
-     variabele opgenomen in de methodes toString en getTotaalPrijs en daar geïnitialiseerd met de
-     waarde 0.0.
-   - In de constructor voor FactuurRegel hoeft kortingspercentage dan niet meer te worden geïnitialiseerd.
-8. Replace Parameter with Method Call wordt toegepast om code smell 'long parameter list' te bestrijden.
-   - printKlant in de Class Factuur kan zonder parameters worden aangeroepen, omdat van de methode
-     getKlantgegevensOpFactuur van Class Klant gebruik gemaakt kan worden en omdat klant een property is
-     die ook beschikbaar is in de methode printKlant.
-9. Remove Duplicate Code door gebruik te maken van een bestaande methode met dezelfde code.
-   - toString in Class FactuurRegel heeft voor een deel dezelfde code als getTotaalPrijs in dezelfde Class.
-     Hoe kunnen we die met elkaar combineren? We kunnen niet zomaar de code in toString vervangen door
-     een aanroep van getTotaalPrijs, omdat het kortingsPercentage dat we in toString bepalen niet wordt
-     teruggegeven als we getTotaalPrijs aanroepen. Hoe lossen we dat op?
-   - We brengen het gedeelte van beide functies voor het bepalen van de korting (regels 85 t/m 103 en
-     149 t/m 167) onder in de private methods getPrijsZonderKorting en getKortingspercentage en roepen
-     deze methods op de plek van de verplaatste regels aan.
-   - Het is schijn dat we kortingspercentage nodig hebben. In regel 12 controleren we of het kortings-
-     percentage 100% is. Maar we kunnen dat natuurlijk vervangen door te controleren of de totaalprijs
-     gelijk is aan 0.0 (100% korting betekent dat het product gratis is). Om zeker te weten dat afrondings-
-     verschillen daarin worden meegenomen gebruiken we 'if (Math.abs(prijsMetKorting - 0.0) < 0.01)'.
-   - Nu kunnen we getTotaalPrijs wel hergebruiken in toString en de code in de regels 91 t/m 112 vervangen
-     door de aanroep van getTotaalPrijs.
+0.  Shotgun surgery leggen we niet uit, omdat we zullen zien dat als we code
+    smells op willen lossen, we vaak op meer plekken de code aan moeten passen.
+    Het oplossen van de andere code smells lost veel van de problematiek van
+    shotgun surgery al vanzelf op.
+1.  Extract Method wordt toegepast om code smell 'long method' op te lossen:
+    - Het aanmaken van een klant wordt verplaatst naar de constructor van Factuur.
+      Want: voor een factuur moet precies 1 klant worden opgegeven.
+      Dat betekent wel dat het aanmaken van de klant verplaatst wordt naar de class Main
+      en dat het bepalen van een BTW-nummer en het type Klant in de class Main wordt
+      ondergebracht in de methode getKlant (met de parameters buitenNederland en
+      typeKlant). Uiteraard moet dan de parameter buitenNederland worden verwijderd uit
+      de methode maakFactuur in de class Factuur.
+    - Er kunnen met de huidige code maar een beperkt aantal factuurregels worden
+      aangemaakt. Dat is geen code smell, maar het beperkt ons natuurlijk wel
+      in het aantal regels dat we in een factuur toe kunnen voegen. Daar maken we
+      een ArrayList van.
+    - Om de volgende stap goed te kunnen doen, wordt een methode addFactuurRegel toegevoegd
+      in de class Factuur. Die is nodig omdat de verplaatsing hieronder code overzet
+      van de class Factuur naar de class Main en zonder addFactuurRegel kan dan
+      geen FactuurRegel aan de factuur worden toegevoegd.
+    - In de methode maakFactuur zijn een aantal regels opgenomen die daar alleen voor
+      het testen van de class Factuur waren opgenomen. Het gaat om het toevoegen van
+      5 factuurregels die in de class Main in een aparte methode voegFactuurRegelsToe
+      worden opgenomen. Deze methode wordt in main in de Class Main aangeroepen.
+2.  Replace Temp with Query wordt toegepast om code smell 'long method' op te lossen:
+    - In regel 119 in methode toString van class FactuurRegel kan tijdelijke variabele
+      totaalAantalProducten worden vervangen door een methode getTotaalAantalProducten
+      die dan in regels 121 en 125 kan worden aangeroepen.
+3.  Preserve Whole Object wordt toegepast om code smell 'long method' op te lossen:
+    - Bij het bepalen vanwege de houdbaarheidsdatum in regel 150 van de class FactuurRegel
+      wordt eerste een tijdelijke variabele vandaag aangemaakt (die pas in de genoemde
+      methode wordt gebruikt en wordt van product de houdbaarheidsdatum doorgegeven.
+      Aan de methode bepaalKortingVanwegeHoudbaarheidsdatum kun je beter geen parameters
+      meegeven, omdat product een private property is die vanuit deze methode gebruikt
+      kan worden om de houdbaarheidsdatum te bepalen.
+    - Dezelfde stap moet dan natuurlijk ook worden genomen in de methode getTotaalPrijs.
+4.  Replace Method with Method Object wordt toegepast om code smell 'long method' op te lossen:
+    - Om de volgende stap mogelijk te maken moet een get-method voor product getProduct
+      worden toegevoegd in FactuurRegel.
+    - Om de volgende stap mogeljk te maken moet een get-method voor aantalProducten
+      getAantalProducten worden toegevoegd in FactuurRegel.
+    - Verplaats de hele procedure voor het bepalen van het kortingspercentage (vanaf regel
+      120 t/m 152) naar een method object Korting. Pas de aanpak Replace Method with
+      Method Object toe om dit te realiseren.
+    - Ook de tijdelijke variabelen kortingVanwegeAantalProducten en
+      kortingVanwegeHoudbaarheidsdatum in regels 100 en 101 kunnen naar het method object
+      Korting worden verplaatst.
+    - Uiteraard gaat de methode getTotaalAantalProducten (die we zojuist hebben aangemaakt)
+      mee naar het method object Korting.
+    - Uiteraard gaat de methode bepaalKortingVanwegeHoudbaarheidsdatum (die we zojuist hebben
+      aangepast) mee naar het method object Korting.
+    - Als na deze verplaatsing in de class FactuurRegel in de method toString wordt gecontroleerd
+      of het kortingspercentage vanwege houdbaarheid 100% is, kan dit worden vervangen door
+      de variabele kortingspercentage die is bepaald in het method object Korting.
+    - Deze stap wordt nog een keer doorlopen in de method getTotaalPrijs van Class FactuurRegel.
+      Bovenstaande stappen moeten daar ook worden doorlopen.
+5.  Decompose Conditional wordt toegepast om code smell 'long method' op te lossen:
+    - In regel 101 wordt een gecombineerde voorwaarde gebruikt die door een methode-aanroep
+      vervangen kan worden. Daarvoor wordt de methode 'productIsNietGeleverd' van het type
+      boolean gebruikt.
+6.  Extract Class wordt toegepast om code smell 'larg class' op te lossen:
+    - Voor Klant worden alle gegevens voor een adres in een aparte class FactuurAdres opgenomen.
+    - Voor FactuurAdres worden de cijfers en letters voor een postcode opgenomen in Class Postcode.
+    - Voor FactuurAdres worden straat, nummer en toevoeging opgenomen in Class Adres.
+    - Voeg toString aan deze Classes toe die in het volgende punt gebruikt kunnen worden.
+    - Voeg een method getKlantgegevensOpFactuur aan Class Klant toe om de voor een factuur relevante
+      gegevens bovenaan de factuur te kunnen tonen.
+7.  Remove Temporary Field
+    - De property kortingsPercentage in Class FactuurRegel is een tijdelijk veld dat als property
+      is toegevoegd, omdat het op twee plekken wordt gebruikt. De property wordt als lokale
+      variabele opgenomen in de methodes toString en getTotaalPrijs en daar geïnitialiseerd met de
+      waarde 0.0.
+    - In de constructor voor FactuurRegel hoeft kortingspercentage dan niet meer te worden geïnitialiseerd.
+8.  Replace Parameter with Method Call wordt toegepast om code smell 'long parameter list' te bestrijden.
+    - printKlant in de Class Factuur kan zonder parameters worden aangeroepen, omdat van de methode
+      getKlantgegevensOpFactuur van Class Klant gebruik gemaakt kan worden en omdat klant een property is
+      die ook beschikbaar is in de methode printKlant.
+9.  Remove Duplicate Code door gebruik te maken van een bestaande methode met dezelfde code.
+    - toString in Class FactuurRegel heeft voor een deel dezelfde code als getTotaalPrijs in dezelfde Class.
+      Hoe kunnen we die met elkaar combineren? We kunnen niet zomaar de code in toString vervangen door
+      een aanroep van getTotaalPrijs, omdat het kortingsPercentage dat we in toString bepalen niet wordt
+      teruggegeven als we getTotaalPrijs aanroepen. Hoe lossen we dat op?
+    - We brengen het gedeelte van beide functies voor het bepalen van de korting (regels 85 t/m 103 en
+      149 t/m 167) onder in de private methods getPrijsZonderKorting en getKortingspercentage en roepen
+      deze methods op de plek van de verplaatste regels aan.
+    - Het is schijn dat we kortingspercentage nodig hebben. In regel 12 controleren we of het kortings-
+      percentage 100% is. Maar we kunnen dat natuurlijk vervangen door te controleren of de totaalprijs
+      gelijk is aan 0.0 (100% korting betekent dat het product gratis is). Om zeker te weten dat afrondings-
+      verschillen daarin worden meegenomen gebruiken we 'if (Math.abs(prijsMetKorting - 0.0) < 0.01)'.
+    - Nu kunnen we getTotaalPrijs wel hergebruiken in toString en de code in de regels 91 t/m 112 vervangen
+      door de aanroep van getTotaalPrijs.
+10. Consolidate Conditional Expression wordt toegepast om code smell 'duplicate code' te bestrijden.
+    - In method toString in Class FactuurRegel wordt duplicate code gebruikt om een lege string terug te geven
+      (omdat de regel niet in de factuur getoond mag worden). Deze duplicate code wordt vervangen door een
+      methode-aanroep waarin gecontroleerd wordt of sprake is van een lege regel (isLegeRegel). Daarvoor
+      moet aan isLegeRegel wel het berekende kortingspercentage worden meegegeven.
