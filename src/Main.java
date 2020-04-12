@@ -36,29 +36,24 @@ public class Main {
          * aantal producten, producten per verpakking (bijv. 6 flessen in een doos),
          * gewicht en eenheid voor dat gewicht (bijv. kg) apart worden ingesteld.
          */
-        Product product = new Product ("Product 1", 2.50, "20-04-2021");
-        FactuurRegel factuurRegel = new FactuurRegel(product);
-        factuurRegel.setAantal(20, 1, 0.0, "");
+        Product product = new ProductPerStuk ("Product 1", 2.50, "20-04-2021");
+        FactuurRegel factuurRegel = new FactuurRegel(20, product);
         factuur.addFactuurRegel(factuurRegel);
 
-        product = new Product ("Product 2", 10.0, "20-04-2020");
-        factuurRegel = new FactuurRegel(product);
-        factuurRegel.setAantal(1, 250, 0.0, "");
+        product = new ProductPerColli ("Product 2", 10.0, "20-04-2020", 250);
+        factuurRegel = new FactuurRegel(1, product);
         factuur.addFactuurRegel(factuurRegel);
 
-        product = new Product ("Product 3", 0.22, "08-04-2020");
-        factuurRegel = new FactuurRegel(product);
-        factuurRegel.setAantal(1000, 1, 0.0, "");
+        product = new ProductPerStuk ("Product 3", 0.22, "08-04-2020");
+        factuurRegel = new FactuurRegel(1000, product);
         factuur.addFactuurRegel(factuurRegel);
 
-        product = new Product ("Product 4", 1.50, "08-04-2020");
-        factuurRegel = new FactuurRegel(product);
-        factuurRegel.setAantal(0, 0, 2.55, "kg");
+        ProductPerGewicht productPerGewicht = new ProductPerGewicht ("Product 4", 1.50, "08-04-2020", 2.55, "kg");
+        factuurRegel = new FactuurRegel(productPerGewicht);
         factuur.addFactuurRegel(factuurRegel);
 
-        product = new Product ("Product 5", 0.88, "21-03-2020");
-        factuurRegel = new FactuurRegel(product);
-        factuurRegel.setAantal(1, 1, 0.0, "");
+        product = new ProductPerStuk ("Product 5", 0.88, "21-03-2020");
+        factuurRegel = new FactuurRegel(1, product);
         factuur.addFactuurRegel(factuurRegel);
     }
 
