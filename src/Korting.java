@@ -40,7 +40,7 @@ public class Korting {
      * zitten, is het totaal aantal verkochte producten bij 11 dozen 66.
      */
     private int getTotaalAantalProducten () {
-        return aantalProducten * product.getAantalProductenInVerpakking();
+        return aantalProducten * product.getAantalProductenPerVerpakking();
     }
 
     public double bepaalKortingsPercentageOpBasisvanProduct () {

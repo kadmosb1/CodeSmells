@@ -94,19 +94,81 @@
       (omdat de regel niet in de factuur getoond mag worden). Deze duplicate code wordt vervangen door een
       methode-aanroep waarin gecontroleerd wordt of sprake is van een lege regel (isLegeRegel). Daarvoor
       moet aan isLegeRegel wel het berekende kortingspercentage worden meegegeven.
-11. Replace Conditional with Polymorphism wordt toegepast om code smell 'switch-statement' te bestrijden.
+11. Met deze stap los je twee code smells op:
+    a. Replace Type Code with Subclasses wordt toegepast om code smell 'primitive obsession' te bestrijden.
+    b. Replace Conditional with Polymorphism wordt toegepast om code smell 'switch-statement' te bestrijden.
     - in maakFactuur wordt een klantkorting over de gehele factuur afgeleid op basis van het type van de
-      klant (CONSUMENT: 0%, OVERHEID: 2%, HORECA: 4%).
+      klant (CONSUMENT: 0%, OVERHEID: 2%, HORECA: 4%) (dit is Primitive Obsession).
+    - De constantes CONSUMENT, OVERHEID en HORECA worden verwijderd uit de Class Klant.
     - Het bepalen van de korting kan worden uitbesteed aan subclasses van Klant voor klanten van het type
-      CONSUMENT, OVERHEID en HORECA: ConsumentKlant, OverheidKlant en HorecaKlant.
+      CONSUMENT, OVERHEID en HORECA: ConsumentKlant, OverheidKlant en HorecaKlant (hierin en in de vorige
+      stap volg je de aanpak van Replace Type Code with Subclasses).
     - De class Klant wordt abstract gemaakt, zodat een abstracte methode getKortingspercentage bij Klant
-      gemaakt kan worden die wordt geïmplementeerd in de subclasses.
+      gemaakt kan worden die wordt geïmplementeerd in de subclasses (hier en hieronder volg je de aanpak
+      van Replace Conditional with Polymorphism).
     - De property typeKlant wordt verwijderd (en ook uit de constructor van Klant wordt de parameter
       typeKlant verwijderd).
-    - De constantes CONSUMENT, OVERHEID en HORECA worden verwijderd uit de Class Klant.
     - Daar waar een nieuwe klant wordt aangemaakt en gebruikt, gebeurt dat nu niet meer op basis van
       de constantes, maar op basis van de nieuwe subclasses, waarvan getKortingspercentage in maakFactuur
       is verschoven naar de aanroep van getKortingsPercentage van de subclasses.
 12. Replace Conditional with Polymorphism wordt toegepast om code smell 'switch-statement' te bestrijden
     (deze keer zonder de aanpak 'Replace Code Type by Subclasses').
-    -
+    - In Class FactuurRegel zit een heel lelijke methode setAantal, waaraan een aantal combinaties mee-
+      gegeven kunnen worden:
+      - Alleen aantal producten.
+      - Een combinatie van aantalProducten (bijv. dozen) en aantalProductenPerVerpakking (bijv. 6 flessen/doos).
+      - Een combinatie van gewicht en eenheid (bijv. 2.88 kg).
+    - Hiermee wordt direct ook aangetoond dat een code smell de code smell 'Shotgun Surgery' kan
+      veroorzaken. Er blijkt op heel veel plekken een afhankelijkheid te bestaan van deze lelijke
+      constructie en het kost dus veel moeite om deze code smell (met setAantal) te verwijderen.
+    - Eigenlijk worden hier drie soorten producten aangemaakt:
+      - Een product dat per stuk wordt verkocht (ProductPerStuk).
+      - Een product dat per verpakking wordt verkocht (ProductPerColli).
+      - Een product dat per gewicht wordt verkocht (ProductPerGewicht).
+    - Deze 3 classes worden een subclass van Product.
+    - In Class Product worden de properties aantalProductenInVerpakking, gewicht en eenheid verwijderd (getters
+      en setters worden verplaatst naar de juiste subclasses).
+    - De classes hebben ieder een eigen constructor:
+      - De property prijsPerStukOfKilo wordt hernoemd naar eenheidsprijs en als parameter in de constructor voor
+        Product ook gewijzigd qua naam.
+      - Class Product wordt een abstract class met een abstract method getTotaalprijs.
+      - De methode getTotaalPrijs wordt in de subclasses geïmplementeerd.
+      - Constructoren van subclasses hebben minimaal een naam, een eenheidsprijs en een houdbaarheidsdatum
+        (die aan de super-constructor wordt meegegeven).
+      - ProductPerStuk heeft geen specifieke uitbreiding van de constructor.
+      - ProductPerColli heeft een constructor met extra een parameter aantalProductenPerVerpakking
+        (en natuurlijk de property aantalProductenPerVerpakking).
+      - ProductPerGewicht heeft een constructor met 2 extra parameters voor gewicht en eenheid
+        (en natuurlijk deze properties).
+    - Met deze stappen hebben we de verwijdering van setAantal in FactuurRegel voorbereid. Die kan
+      worden verwijderd, want eigenlijk wil je voor elk product bij het aanroepen van de constructor
+      al weten hoeveel producten er worden opgegeven:
+      - Voor het toevoegen van een ProductPerStuk en een ProductPerColli wordt een constructor met
+        de parameters aantal en product van type Product toegevoegd.
+      - Voor het toevoegen van een ProductPerGewicht wordt een constructor met de parameter
+        product van het type ProductPerGewicht toegevoegd (daarvoor is het aantal namelijk altijd 0).
+    - De methode getPrijsZonderKorting in Class FactuurRegel is bijna overbodig geworden, omdat die nu
+      gelijk is aan het aanroepen van de abstract method getPrijsZonderKorting die in de subclasses
+      is geïmplementeerd. We laten hem toch intact (om niet teveel wijzigingen te hoeven doorvoeren en
+      we roepen in de method getPrijsZonderKorting de method getTotaalPrijs van het product aan.
+    - In de method productIsNietGeleverd is de tweede voorwaarde (vergelijking van gewicht) hetzelfde
+      als de eerste (in de constructor voor het toevoegen van ProductPerGewicht wordt de waarde van
+      aantalProducten gelijk gemaakt aan 0). Deze voorwaarde wordt daarmee vereenvoudigd.
+    - In de oude situatie werd in toString voor FactuurRegel gebruik gemaakt van waardes voor aantal
+      producten per verpakking en gewicht. Om te voorkomen dat we dit nog steeds op dezelfde manier op
+      moeten lossen kunnen we ook voor deze if-then-else gebruik maken van polymorfisme door
+      deze regels te verplaatsen naar een abstract method getFormattedFactuurRegelString ()
+      die in de subclasses wordt geïmplementeerd. Aan deze methode moeten wel de parameters
+      aantalProducten, kortingspercentage en prijsMetKorting worden meegegeven.
+    - Gebruik de drie bestaande strings als basis om de factuurregels voor de verschillende producten
+      in te vullen (meestal volstaat het om product te verwijderen - want je zit in product en dus wordt
+      standaard uitgegaan van this - en/of om de getter te vervangen door de naam van de property -
+      want ook hiervoor geldt dat de property in het product vanuit this bekend is.
+    - Om de korting op basis van aantallen producten te kunnen bepalen, moet een abstract method
+      getAantalProductenPerVerpakking aan Product worden toegevoegd, die voor de verschillende producten
+      de volgende waarde teruggeeft:
+      - Bij ProductPerStuk wordt 1 teruggegeven.
+      - Bij ProductPerColli wordt de property teruggegeven (het is de getter voor die property).
+      - Bij ProductPerGewicht wordt 1 teruggeven.
+    - In Main moet nu de methode voegFactuurRegelsToe nog worden aangepast.
+    - En uiteraard moeten eventuele gebruikte junit-testcases ook worden aangepast.
