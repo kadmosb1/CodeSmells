@@ -107,3 +107,6 @@
     - Daar waar een nieuwe klant wordt aangemaakt en gebruikt, gebeurt dat nu niet meer op basis van
       de constantes, maar op basis van de nieuwe subclasses, waarvan getKortingspercentage in maakFactuur
       is verschoven naar de aanroep van getKortingsPercentage van de subclasses.
+12. Replace Conditional with Polymorphism wordt toegepast om code smell 'switch-statement' te bestrijden
+    (deze keer zonder de aanpak 'Replace Code Type by Subclasses').
+    -
