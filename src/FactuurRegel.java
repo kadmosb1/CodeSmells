@@ -108,6 +108,10 @@ public class FactuurRegel {
         return (aantalProducten == 0) && (product.getGewicht() <= 0.0);
     }
 
+    private boolean isLegeRegel (double kortingspercentage) {
+        return productIsNietGeleverd() || (Math.abs(kortingspercentage - 100.0) < 0.01);
+    }
+
     /*
      * De string waarmee een factuurregel op het scherm getoond kan worden,
      * kan met behulp van de methode toString worden opgevraagd.
@@ -126,10 +130,7 @@ public class FactuurRegel {
          * in deze factuurregel 0 is, dan wordt een lege regel terug gegeven.
          * Dat gebeurt ook als de korting vanwege de houdbaarheidsdatum 100% is.
          */
-        if (productIsNietGeleverd()) {
-            return "";
-        }
-        else if (kortingspercentage == 100.0) {
+        if (isLegeRegel (kortingspercentage)) {
             return "";
         }
 
