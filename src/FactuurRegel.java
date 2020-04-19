@@ -32,7 +32,7 @@ public class FactuurRegel {
      * methods toString en getTotaalprijs (de gemeenschappelijke code is verplaatst naar deze
      * method en naar de method getKortingspercentage hieronder.
      */
-    public double getPrijsZonderKorting () {
+    private double getPrijsZonderKorting () {
         return aantalProducten * product.getTotaalPrijs();
     }
 
@@ -41,7 +41,7 @@ public class FactuurRegel {
      * methods toString en getTotaalprijs (de gemeenschappelijke code is verplaatst naar deze
      * method en naar de method getKortingspercentage
      */
-    public double getKortingspercentage () {
+    private double getKortingspercentage () {
         Korting korting = new Korting (this);
         return korting.bepaalKortingsPercentageOpBasisvanProduct();
     }
