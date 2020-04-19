@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Main {
 
@@ -33,8 +34,8 @@ public class Main {
     protected static void voegFactuurRegelsToe (Factuur factuur) {
 
         /*
-         * Om de houdbaarheidsdata ook volgend jaar nog te laten werken, worden hieronder
-         * relatieve houdbaarheidsdata geïnitialiseerd.
+         * Om de werking van de houdbaarheidsdatum goed te kunnen testen, worden
+         * drie variabelen voor vers, oud en bedorven toegevoegd.
          */
         String vers = DatumUtil.getDatumStringMetAantalDagenVoorVandaag(-6);
         String oud = DatumUtil.getDatumStringMetAantalDagenVoorVandaag(6);
@@ -45,7 +46,6 @@ public class Main {
          * aantal producten, producten per verpakking (bijv. 6 flessen in een doos),
          * gewicht en eenheid voor dat gewicht (bijv. kg) apart worden ingesteld.
          */
-
         Product product = new ProductPerStuk ("Product 1", 2.50, vers);
         FactuurRegel factuurRegel = new FactuurRegel(20, product);
         factuur.addFactuurRegel(factuurRegel);
@@ -88,6 +88,6 @@ public class Main {
          * maakFactuur naar class Main nodig.
          */
         voegFactuurRegelsToe (factuur);
-        factuur.maakFactuur ();
+        new FactuurPrinter(factuur).printFactuur();
     }
 }

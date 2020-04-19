@@ -34,8 +34,8 @@ public class FactuurTest {
         Factuur factuur = new Factuur (getKlant(true));
 
         /*
-         * Om de houdbaarheidsdata ook volgend jaar nog te laten werken, worden hieronder
-         * relatieve houdbaarheidsdata geïnitialiseerd.
+         * Om de werking van de houdbaarheidsdatum goed te kunnen testen, worden
+         * drie variabelen voor vers, oud en bedorven toegevoegd.
          */
         String vers = DatumUtil.getDatumStringMetAantalDagenVoorVandaag(-6);
         String oud = DatumUtil.getDatumStringMetAantalDagenVoorVandaag(6);
